@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Bienestar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f3eeff;min-height:100vh;}
+.app{max-width:680px;margin:0 auto;padding:20px 16px 60px;}
+
+/* WELCOME */
+.welcome{text-align:center;padding:10px 10px 30px;}
+.hero-banner{background:linear-gradient(135deg,#7c3aed 0%,#db2777 100%);border-radius:28px;padding:36px 28px 32px;margin-bottom:22px;position:relative;overflow:hidden;}
+.hero-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.07);border-radius:50%;}
+.hero-banner::after{content:'';position:absolute;bottom:-50px;left:-30px;width:220px;height:220px;background:rgba(255,255,255,0.05);border-radius:50%;}
+.hero-emoji{font-size:58px;margin-bottom:12px;display:block;position:relative;z-index:1;}
+.hero-banner h1{font-size:30px;font-weight:800;color:white;margin-bottom:8px;position:relative;z-index:1;}
+.hero-banner p{font-size:15px;color:rgba(255,255,255,0.88);line-height:1.6;max-width:420px;margin:0 auto;position:relative;z-index:1;}
+
+.features-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px;}
+.feat-card{background:white;border-radius:16px;padding:16px 12px;text-align:center;box-shadow:0 2px 10px rgba(124,58,237,0.08);}
+.feat-card .ficon{font-size:26px;margin-bottom:6px;}
+.feat-card p{font-size:12px;color:#666;line-height:1.45;font-weight:500;}
+
+.privacy-strip{background:#fff;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.privacy-strip .picon{font-size:24px;flex-shrink:0;}
+.privacy-strip p{font-size:13px;color:#666;line-height:1.45;}
+
+.btn-start{background:linear-gradient(135deg,#f97316,#db2777);color:white;border:none;padding:16px 48px;border-radius:30px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(219,39,119,0.35);transition:transform 0.15s,box-shadow 0.15s;width:100%;}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(219,39,119,0.45);}
+
+/* DATOS PERSONALES */
+.datos-screen{animation:fadeIn 0.4s;}
+.datos-header{background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:20px;padding:24px;text-align:center;color:white;margin-bottom:20px;}
+.datos-header h2{font-size:22px;font-weight:700;margin-bottom:4px;}
+.datos-header p{font-size:14px;opacity:0.88;}
+.field-group{background:white;border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.field-group label{font-size:13px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:8px;}
+.field-group input,.field-group select{width:100%;padding:11px 14px;border:2px solid #e5d8ff;border-radius:12px;font-size:15px;color:#333;outline:none;transition:border-color 0.2s;background:white;}
+.field-group input:focus,.field-group select:focus{border-color:#7c3aed;}
+.gender-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.gender-btn{padding:10px 6px;border-radius:12px;border:2px solid #e5d8ff;background:white;font-size:13px;font-weight:600;cursor:pointer;color:#666;transition:all 0.15s;text-align:center;}
+.gender-btn.active{background:#f3eeff;border-color:#7c3aed;color:#7c3aed;}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:20px;}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.section-label{font-size:13px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.5px;}
+.progress-count{font-size:13px;color:#999;}
+.progress-bar{height:8px;background:#e0d7f8;border-radius:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#db2777);border-radius:10px;transition:width 0.4s ease;}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;gap:12px;background:white;border-radius:16px;padding:16px 20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.section-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.section-header h2{font-size:18px;font-weight:700;color:#2d1b69;}
+.section-header p{font-size:13px;color:#999;margin-top:2px;}
+
+/* QUESTION CARD */
+.question-card{background:white;border-radius:16px;padding:20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05);border:2px solid transparent;transition:border-color 0.2s;}
+.question-card.answered{border-color:#c4b5fd;}
+.question-text{font-size:15px;color:#333;line-height:1.55;margin-bottom:14px;font-weight:500;}
+.btn-group{display:flex;gap:10px;}
+.btn-yn{flex:1;padding:11px;border-radius:12px;border:2px solid #e5e7eb;background:white;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;color:#888;}
+.btn-yn.active{background:#f3eeff;border-color:#7c3aed;color:#5b21b6;}
+.btn-yn:hover:not(.active){background:#fafafa;border-color:#c4b5fd;}
+
+/* NAV */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px;}
+.btn-nav{padding:12px 26px;border-radius:25px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.btn-prev{background:white;color:#7c3aed;border:2px solid #c4b5fd;}
+.btn-prev:hover{background:#f5f0ff;}
+.btn-next{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;box-shadow:0 3px 12px rgba(124,58,237,0.3);}
+.btn-next:hover{transform:translateY(-1px);}
+.btn-next:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+
+/* RESULTS */
+.results{animation:fadeIn 0.5s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.result-hero{background:linear-gradient(135deg,#7c3aed 0%,#db2777 100%);border-radius:20px;padding:28px 24px;text-align:center;color:white;margin-bottom:20px;position:relative;overflow:hidden;}
+.result-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;background:rgba(255,255,255,0.08);border-radius:50%;}
+.result-hero .emoji{font-size:48px;margin-bottom:10px;display:block;position:relative;z-index:1;}
+.result-hero h2{font-size:22px;font-weight:700;margin-bottom:8px;position:relative;z-index:1;}
+.result-hero p{font-size:14px;opacity:0.9;line-height:1.55;position:relative;z-index:1;}
+
+.alert-box{background:#fff7ed;border-left:4px solid #f97316;border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:14px;}
+.alert-box.critical{background:#fff1f2;border-left-color:#f43f5e;}
+.alert-box h3{font-size:14px;font-weight:700;color:#c2410c;margin-bottom:4px;}
+.alert-box.critical h3{color:#be123c;}
+.alert-box p{font-size:13px;color:#78350f;line-height:1.5;}
+.alert-box.critical p{color:#9f1239;}
+
+.rsection-title{font-size:13px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.5px;margin:20px 0 10px;}
+
+.resource-card{background:white;border-radius:14px;padding:16px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:flex-start;gap:14px;}
+.rc-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.rc-orange{background:#fff7ed;}
+.rc-teal{background:#f0fdfa;}
+.resource-card h4{font-size:14px;font-weight:700;color:#2d1b69;margin-bottom:2px;}
+.resource-card .rc-phone{font-size:15px;font-weight:700;color:#f97316;margin-bottom:3px;}
+.resource-card p{font-size:12px;color:#888;line-height:1.4;}
+
+.ts-card{background:linear-gradient(135deg,#4a2d8a,#7c3aed);color:white;border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;}
+.ts-card h3{font-size:17px;font-weight:700;margin-bottom:6px;}
+.ts-card p{font-size:13px;opacity:0.88;line-height:1.5;}
+
+.btn-restart{width:100%;padding:14px;background:white;color:#7c3aed;border:2px solid #c4b5fd;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;transition:background 0.15s;}
+.btn-restart:hover{background:#f5f0ff;}
+
+.hidden{display:none!important;}
+.saving-banner{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 16px;font-size:13px;color:#166534;margin-top:12px;text-align:center;}
+.error-banner{background:#fff1f2;border:1px solid #fca5a5;border-radius:10px;padding:10px 16px;font-size:13px;color:#9f1239;margin-top:12px;text-align:center;}
+
+.shape-row{display:flex;justify-content:center;gap:10px;margin:16px 0;}
+.shape{width:12px;height:12px;border-radius:50%;display:inline-block;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- LOGO -->
+  <div style="display:flex;justify-content:flex-end;padding:8px 0 4px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Tecnol%C3%B3gico_de_Monterrey_%28ITESM%29_logo.svg/320px-Tecnol%C3%B3gico_de_Monterrey_%28ITESM%29_logo.svg.png" alt="Tecnológico de Monterrey" style="height:36px;opacity:0.85;">
+  </div>
+
+  <!-- WELCOME -->
+  <div id="screen-welcome" class="welcome">
+    <div class="hero-banner">
+      <span class="hero-emoji">💜</span>
+      <h1>¿Cómo estás hoy?</h1>
+      <p>Este cuestionario es un espacio seguro para contarnos cómo te has sentido. No hay respuestas buenas ni malas.</p>
+    </div>
+
+    <div class="features-row">
+      <div class="feat-card"><div class="ficon">🔒</div><p>Tus respuestas son confidenciales</p></div>
+      <div class="feat-card"><div class="ficon">⏱️</div><p>Solo toma unos minutos</p></div>
+      <div class="feat-card"><div class="ficon">🤝</div><p>Te conectamos con apoyo real</p></div>
+    </div>
+
+    <div class="privacy-strip">
+      <div class="picon">💡</div>
+      <p>Responde con sinceridad. Nadie te va a juzgar. Esta información solo la verán personas que quieren ayudarte.</p>
+    </div>
+
+    <button class="btn-start" onclick="goToDatos()">Empezar ✨</button>
+
+    <div class="shape-row">
+      <span class="shape" style="background:#7c3aed;"></span>
+      <span class="shape" style="background:#db2777;width:8px;height:8px;margin-top:2px;"></span>
+      <span class="shape" style="background:#f97316;"></span>
+      <span class="shape" style="background:#db2777;width:8px;height:8px;margin-top:2px;"></span>
+      <span class="shape" style="background:#7c3aed;"></span>
+    </div>
+  </div>
+
+  <!-- DATOS PERSONALES -->
+  <div id="screen-datos" class="hidden datos-screen">
+    <div class="datos-header">
+      <h2>Antes de comenzar...</h2>
+      <p>Cuéntanos un poco sobre ti. Tus datos son confidenciales.</p>
+    </div>
+
+    <div class="field-group">
+      <label>Edad</label>
+      <input type="number" id="d-edad" min="10" max="20" placeholder="Ej. 14" oninput="checkDatos()">
+    </div>
+
+    <div class="field-group">
+      <label>Género</label>
+      <div class="gender-grid">
+        <button class="gender-btn" id="g-masculino" onclick="setGenero('Masculino')">👦 Masculino</button>
+        <button class="gender-btn" id="g-femenino" onclick="setGenero('Femenino')">👧 Femenino</button>
+        <button class="gender-btn" id="g-otro" onclick="setGenero('Prefiero no decir')">🤍 Prefiero no decir</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Grado escolar</label>
+      <select id="d-grado" onchange="checkDatos()">
+        <option value="">Selecciona tu grado...</option>
+        <option>1° Secundaria</option>
+        <option>2° Secundaria</option>
+        <option>3° Secundaria</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Turno</label>
+      <div class="gender-grid" style="grid-template-columns:repeat(2,1fr);">
+        <button class="gender-btn" id="t-matutino" onclick="setTurno('Matutino')">🌅 Matutino</button>
+        <button class="gender-btn" id="t-vespertino" onclick="setTurno('Vespertino')">🌆 Vespertino</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Número de lista</label>
+      <input type="number" id="d-lista" min="1" max="50" placeholder="Ej. 12" oninput="checkDatos()">
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav btn-prev" onclick="goToWelcome()">← Atrás</button>
+      <button class="btn-nav btn-next" id="btn-datos-next" onclick="startQuiz()" disabled>Continuar →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="section-label" id="prog-section">Hogar</span>
+        <span class="progress-count" id="prog-count">Sección 1 de 8</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:12%"></div></div>
+    </div>
+    <div id="section-content"></div>
+    <div class="nav-row">
+      <button class="btn-nav btn-prev" id="btn-prev" onclick="prevSection()">← Anterior</button>
+      <button class="btn-nav btn-next" id="btn-next" onclick="nextSection()">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screen-results" class="hidden results"></div>
+
+</div>
+<script>
+const SHEETS_URL="TU_GOOGLE_APPS_SCRIPT_URL_AQUI";
+
+let generoSeleccionado="",turnoSeleccionado="";
+function setTurno(t){
+  turnoSeleccionado=t;
+  ["matutino","vespertino"].forEach(x=>document.getElementById("t-"+x).classList.remove("active"));
+  document.getElementById("t-"+t.toLowerCase()).classList.add("active");
+  checkDatos();
+}
+function setGenero(g){
+  generoSeleccionado=g;
+  ["masculino","femenino","otro"].forEach(x=>document.getElementById("g-"+x).classList.remove("active"));
+  const map={"Masculino":"masculino","Femenino":"femenino","Prefiero no decir":"otro"};
+  document.getElementById("g-"+map[g]).classList.add("active");
+  checkDatos();
+}
+function checkDatos(){
+  const edad=document.getElementById("d-edad").value;
+  const grado=document.getElementById("d-grado").value;
+  const lista=document.getElementById("d-lista").value;
+  document.getElementById("btn-datos-next").disabled=!(edad&&grado&&lista&&generoSeleccionado&&turnoSeleccionado);
+}
+function goToWelcome(){
+  document.getElementById("screen-datos").classList.add("hidden");
+  document.getElementById("screen-welcome").classList.remove("hidden");
+}
+function goToDatos(){
+  document.getElementById("screen-welcome").classList.add("hidden");
+  document.getElementById("screen-datos").classList.remove("hidden");
+}
+
+const sections=[
+  {id:"hogar",label:"Hogar",icon:"🏠",color:"#fff7ed",desc:"Sobre tu familia y tu casa",questions:[
+    {id:"h1",text:"En el último mes, ¿ha habido algún miembro nuevo en la familia o se ha mudado alguien a casa?",flag:false},
+    {id:"h2",text:"En el último mes, ¿ha habido violencia física en casa?",flag:true}
+  ]},
+  {id:"educacion",label:"Educación y Empleo",icon:"📚",color:"#f0f9ff",desc:"Sobre tu escuela y amigos",questions:[
+    {id:"e1",text:"¿Tus calificaciones han bajado en el último mes?",flag:true},
+    {id:"e2",text:"En el último mes, ¿has contado con amigos cercanos en la escuela?",flag:false,invertFlag:true},
+    {id:"e3",text:"¿Hay algún adulto en la escuela con quien sientas que podrías hablar sobre algo importante?",flag:false,invertFlag:true}
+  ]},
+  {id:"alimentacion",label:"Alimentación",icon:"🍎",color:"#f0fdf4",desc:"Sobre tus hábitos alimenticios",questions:[
+    {id:"a1",text:"En el último mes, ¿te ha preocupado tu peso?",flag:true},
+    {id:"a2",text:"¿Has hecho alguna dieta en el último mes?",flag:true}
+  ]},
+  {id:"actividades",label:"Actividades",icon:"🎮",color:"#fdf4ff",desc:"Sobre tu tiempo libre y tecnología",questions:[
+    {id:"ac1",text:"En el último mes, ¿has pasado más de 4 horas al día en el celular fuera de tareas escolares?",flag:true},
+    {id:"ac2",text:"En el último mes, ¿has dedicado muchas horas a videojuegos en un día normal?",flag:true},
+    {id:"ac3",text:"En el último mes, ¿te has sentido excluido(a) o rechazado(a) por compañeros, ya sea en persona o en línea?",flag:true}
+  ]},
+  {id:"seguridad",label:"Seguridad",icon:"🛡️",color:"#fff7ed",desc:"Sobre tu seguridad personal",questions:[
+    {id:"s1",text:"En el último mes, ¿has sido víctima de bullying o burlas en la escuela?",flag:true},
+    {id:"s2",text:"En el último mes, ¿has sufrido acoso por redes sociales, videojuegos o aplicaciones de mensajería?",flag:true}
+  ]},
+  {id:"suicidio",label:"Salud Mental",icon:"💙",color:"#f5f3ff",desc:"Sobre cómo te has sentido",questions:[
+    {id:"sm1",text:"En el último mes, ¿te has sentido triste, desanimado(a) o sin esperanza con frecuencia?",flag:true},
+    {id:"sm2",text:"En el último mes, ¿has tenido problemas para conciliar el sueño o mantenerte dormido(a)?",flag:true},
+    {id:"sm3",text:"En el último mes, ¿las redes sociales te han hecho sentir peor contigo mismo(a)?",flag:true},
+    {id:"sm4",text:"En el último mes, ¿has pensado en lastimarte de alguna manera?",flag:true,critical:true}
+  ]},
+  {id:"sexualidad",label:"Sexualidad",icon:"💜",color:"#fdf2f8",desc:"Sobre tus relaciones personales",questions:[
+    {id:"sx1",text:"En el último mes, ¿te has sentido respetado(a) y cómodo(a) en tus relaciones?",flag:false,invertFlag:true},
+    {id:"sx2",text:"En el último mes, ¿alguien te ha presionado para hacer algo sexual que no querías?",flag:true,critical:true}
+  ]},
+  {id:"drogas",label:"Sustancias",icon:"⚠️",color:"#fff7ed",desc:"Sobre el consumo de sustancias",questions:[
+    {id:"d1",text:"Durante el último mes, ¿sentiste presión de amigos o compañeros para consumir alguna sustancia?",flag:true},
+    {id:"d2",text:"Durante el último mes, ¿has consumido tabaco, marihuana o cigarrillos electrónicos (vapes)?",flag:true}
+  ]}
+];
+
+const resources={
+  crisis:{name:"Línea de la Vida",phone:"800 911 2000",icon:"📞",iconBg:"rc-orange",desc:"Atención en crisis 24/7, gratuita y confidencial."},
+  salme:{name:"SALME – Inst. Jalisciense de Salud Mental",phone:"33 3030 9900",icon:"🏥",iconBg:"rc-teal",desc:"Crisis, consulta psiquiátrica y psicológica. Gratuito. Av. Zoquipan #1000, Zapopan."},
+  cisame:{name:"CISAME",phone:"salme.jalisco.gob.mx/cisame",icon:"🏠",iconBg:"rc-teal",desc:"Centros de salud mental en ZMG para niños, adolescentes y adultos."},
+  hospital:{name:"Hospital Civil – Paidopsiquiatría",phone:"33 3614 5501",icon:"🏥",iconBg:"rc-teal",desc:"Unidad especializada en salud mental infantil y adolescente. Hospital #278, Sector Hidalgo."},
+  ifitaf:{name:"IFITAF – Inst. de Tratamiento del Adolescente",phone:"31 2500 34",icon:"🏠",iconBg:"rc-orange",desc:"Especializado en adolescentes y familia. Velázquez #299, Col. La Estancia, Zapopan."},
+  cade:{name:"CADE – Clínica de Ansiedad, Depresión y Estrés",phone:"Planeta #2590, GDL",icon:"🏠",iconBg:"rc-orange",desc:"Psicoterapia y evaluación psiquiátrica para trastornos afectivos."},
+  cij:{name:"CIJ Guadalajara",phone:"33 3615 2323",icon:"👥",iconBg:"rc-teal",desc:"Apoyo psicológico y prevención de adicciones. C. Agustín Yáñez 2613, Col. Moderna."},
+  consejo:{name:"Consejo Estatal contra las Adicciones – Jalisco",phone:"33 3030 5000 ext. 56560",icon:"🤝",iconBg:"rc-orange",desc:"Orientación sobre consumo de alcohol y otras sustancias. Av. de la Paz 2345, GDL."},
+  emergencias:{name:"Emergencias",phone:"911",icon:"🚨",iconBg:"rc-orange",desc:"Si estás en riesgo inmediato o necesitas ayuda de emergencia."}
+};
+
+let current=0,answers={};
+
+function startQuiz(){
+  document.getElementById("screen-datos").classList.add("hidden");
+  document.getElementById("screen-quiz").classList.remove("hidden");
+  renderSection();
+}
+
+function renderSection(){
+  const sec=sections[current],total=sections.length;
+  document.getElementById("prog-section").textContent=sec.label;
+  document.getElementById("prog-count").textContent=`Sección ${current+1} de ${total}`;
+  document.getElementById("prog-fill").style.width=`${Math.round(((current+1)/total)*100)}%`;
+  document.getElementById("btn-prev").style.visibility=current===0?"hidden":"visible";
+  document.getElementById("btn-next").textContent=current===total-1?"Ver mis resultados 💜":"Siguiente →";
+  let html=`<div class="section-header"><div class="section-icon" style="background:${sec.color}">${sec.icon}</div><div><h2>${sec.label}</h2><p>${sec.desc}</p></div></div>`;
+  sec.questions.forEach(q=>{
+    const ans=answers[q.id];
+    html+=`<div class="question-card ${ans!==undefined?'answered':''}" id="card-${q.id}">
+      <p class="question-text">${q.text}</p>
+      <div class="btn-group">
+        <button class="btn-yn ${ans==='si'?'active':''}" onclick="setAnswer('${q.id}','si')">✓ Sí</button>
+        <button class="btn-yn ${ans==='no'?'active':''}" onclick="setAnswer('${q.id}','no')">✗ No</button>
+      </div></div>`;
+  });
+  document.getElementById("section-content").innerHTML=html;
+  updateNextBtn();
+}
+
+function setAnswer(qid,val){
+  answers[qid]=val;
+  document.querySelectorAll(`#card-${qid} .btn-yn`).forEach(b=>b.classList.remove("active"));
+  const btns=document.querySelectorAll(`#card-${qid} .btn-yn`);
+  btns[val==='si'?0:1].classList.add("active");
+  document.getElementById(`card-${qid}`).classList.add("answered");
+  updateNextBtn();
+}
+
+function updateNextBtn(){
+  const allAnswered=sections[current].questions.every(q=>answers[q.id]!==undefined);
+  document.getElementById("btn-next").disabled=!allAnswered;
+}
+
+function nextSection(){
+  if(current<sections.length-1){current++;renderSection();window.scrollTo(0,0);}
+  else showResults();
+}
+function prevSection(){
+  if(current>0){current--;renderSection();window.scrollTo(0,0);}
+}
+
+function getFlags(){
+  let flags={critical:[],moderate:[],areas:{}};
+  sections.forEach(sec=>sec.questions.forEach(q=>{
+    const ans=answers[q.id];
+    const isFlagged=q.invertFlag?(ans==='no'):(ans==='si');
+    if(q.flag&&isFlagged){
+      if(q.critical)flags.critical.push({sec:sec.id,q});
+      else{flags.moderate.push({sec:sec.id,q});flags.areas[sec.id]=true;}
+    }
+  }));
+  return flags;
+}
+
+function getRecommendedResources(flags){
+  let res=new Set();
+  if(flags.critical.length>0){res.add("crisis");res.add("emergencias");}
+  if(flags.areas["suicidio"]){res.add("crisis");res.add("salme");res.add("hospital");}
+  if(flags.areas["drogas"]){res.add("cij");res.add("consejo");}
+  if(flags.areas["sexualidad"]||flags.areas["seguridad"]){res.add("ifitaf");res.add("crisis");}
+  if(flags.areas["alimentacion"]){res.add("cade");res.add("salme");}
+  if(flags.areas["hogar"]){res.add("ifitaf");res.add("salme");}
+  if(flags.areas["educacion"]||flags.areas["actividades"]){res.add("cisame");res.add("cade");}
+  if(res.size===0)res.add("crisis");
+  return[...res];
+}
+
+function showResults(){
+  document.getElementById("screen-quiz").classList.add("hidden");
+  const flags=getFlags();
+  const hasCritical=flags.critical.length>0;
+  const hasModerate=flags.moderate.length>0;
+  const resKeys=getRecommendedResources(flags);
+  let html="";
+  if(hasCritical){
+    html+=`<div class="result-hero" style="background:linear-gradient(135deg,#be123c,#f43f5e)">
+      <span class="emoji">🆘</span><h2>Necesitas apoyo ahora mismo</h2>
+      <p>Gracias por responder con honestidad. Algunas de tus respuestas nos indican que podrías estar pasando por un momento muy difícil. No tienes que enfrentar esto solo(a).</p>
+    </div>
+    <div class="alert-box critical"><h3>⚠️ Atención inmediata recomendada</h3><p>Por favor, acércate de inmediato a tu trabajadora social, orientador(a) o un adulto de confianza. Si estás en peligro, llama al 911.</p></div>`;
+  } else if(hasModerate){
+    html+=`<div class="result-hero">
+      <span class="emoji">💜</span><h2>Gracias por ser honesto(a)</h2>
+      <p>Notamos que hay algunas áreas donde podrías beneficiarte de apoyo. Pedir ayuda es una señal de fortaleza, no de debilidad.</p>
+    </div>
+    <div class="alert-box"><h3>💡 Te recomendamos buscar apoyo</h3><p>Acércate con tu trabajadora social, prefecto(a) de confianza o algún adulto en tu escuela. No tienes que cargar esto solo(a).</p></div>`;
+  } else {
+    html+=`<div class="result-hero" style="background:linear-gradient(135deg,#059669,#10b981)">
+      <span class="emoji">🌟</span><h2>¡Vas muy bien!</h2>
+      <p>Tus respuestas sugieren que en general estás bien. Recuerda que siempre puedes hablar con alguien de confianza si algo cambia.</p>
+    </div>`;
+  }
+  html+=`<div class="ts-card"><h3>🏫 Habla con alguien hoy</h3><p>Tu trabajadora social, orientador(a) o prefecto(a) están para apoyarte. No importa qué tan grande o pequeño sea lo que sientes — mereces ser escuchado(a).</p></div>`;
+  if(resKeys.length>0){
+    html+=`<p class="rsection-title">Recursos de apoyo en Guadalajara</p>`;
+    resKeys.forEach(k=>{
+      const r=resources[k];
+      html+=`<div class="resource-card"><div class="rc-icon ${r.iconBg}">${r.icon}</div><div><h4>${r.name}</h4><div class="rc-phone">${r.phone}</div><p>${r.desc}</p></div></div>`;
+    });
+  }
+  html+=`<div id="save-status"></div><button class="btn-restart" onclick="restart()">↩ Responder de nuevo</button>`;
+  const el=document.getElementById("screen-results");
+  el.innerHTML=html;el.classList.remove("hidden");
+  window.scrollTo(0,0);
+  saveToSheets(flags,hasCritical,hasModerate);
+}
+
+async function saveToSheets(flags,hasCritical,hasModerate){
+  if(SHEETS_URL==="TU_GOOGLE_APPS_SCRIPT_URL_AQUI")return;
+  const statusEl=document.getElementById("save-status");
+  const row={
+    timestamp:new Date().toLocaleString("es-MX"),
+    edad:document.getElementById("d-edad").value,
+    genero:generoSeleccionado,
+    turno:turnoSeleccionado,
+    grado:document.getElementById("d-grado").value,
+    numero_lista:document.getElementById("d-lista").value
+  };
+  sections.forEach(sec=>sec.questions.forEach(q=>{row[q.id]=answers[q.id]||"";}));
+  row["flags_criticas"]=flags.critical.map(f=>f.q.id).join(", ")||"ninguna";
+  row["flags_moderadas"]=flags.moderate.map(f=>f.sec).join(", ")||"ninguna";
+  row["nivel_riesgo"]=hasCritical?"CRITICO":hasModerate?"MODERADO":"BAJO";
+  try{
+    await fetch(SHEETS_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(row)});
+    statusEl.innerHTML=`<div class="saving-banner">✅ Respuestas registradas de forma segura.</div>`;
+  }catch(e){
+    statusEl.innerHTML=`<div class="error-banner">⚠️ No se pudieron guardar las respuestas. Avisa a tu escuela.</div>`;
+  }
+}
+
+function restart(){
+  answers={};current=0;generoSeleccionado="";turnoSeleccionado="";
+  ["masculino","femenino","otro"].forEach(x=>document.getElementById("g-"+x).classList.remove("active"));
+  ["matutino","vespertino"].forEach(x=>document.getElementById("t-"+x).classList.remove("active"));
+  document.getElementById("d-edad").value="";
+  document.getElementById("d-grado").value="";
+  document.getElementById("d-lista").value="";
+  document.getElementById("screen-results").classList.add("hidden");
+  document.getElementById("screen-welcome").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
