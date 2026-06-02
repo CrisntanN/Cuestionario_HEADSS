@@ -430,7 +430,7 @@ async function saveToSheets(flags,hasCritical,hasModerate){
     grado:document.getElementById("d-grado").value,
     numero_lista:document.getElementById("d-lista").value
   };
-  sections.forEach(sec=>sec.questions.forEach(q=>{row[q.id]=answers[q.id]||"";}));
+  sections.forEach(sec=>sec.questions.forEach(q=>{row[q.text]=answers[q.id]==='si'?'Sí':answers[q.id]==='no'?'No':"";}));
   row["flags_criticas"]=flags.critical.map(f=>f.q.id).join(", ")||"ninguna";
   row["flags_moderadas"]=flags.moderate.map(f=>f.sec).join(", ")||"ninguna";
   row["nivel_riesgo"]=hasCritical?"CRITICO":hasModerate?"MODERADO":"BAJO";
